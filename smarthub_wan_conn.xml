@@ -1,0 +1,52 @@
+<status>
+	<!-- REAL -->
+		<wan_conn_status_list type="array" value="[['connected%3B72%3Bpass'],
+['disconnected%3B0%3Bpass'],
+['disconnected%3B0%3Bpass'],
+null]" />
+		<wan_conn_volume_list type="array" value="[['371147671408%3B336463954090%3B34683717318'],
+['0%3B0%3B0'],
+['0%3B0%3B0'],
+null]" />
+		<wan_linestatus_rate_list type="array" value="[['DOWN','ADSL','G%2EDMT','0','0','0','0','0','0','0','0','0','0','0','0','fast'],
+null]" />
+		<wlan_channel_list type="array" value="[['11','0','11'],
+['11','0','11'],
+['11','0','11'],
+['11','0','11'],
+['11','0','11'],
+['40','0','40'],
+['40','0','40'],
+['40','0','40'],
+['40','0','40'],
+['40','0','40'],
+null]" />
+		<curlinkstatus type="array" value="[['connected%3B51'],
+['disconnected%3B0'],
+['disconnected%3B0'],
+null]" />
+		<sysuptime value="1284142" />
+		<status_rate type="array" value="[['1000000000%3B1000000000%3B0%3B0'],
+['0%3B0%3B0%3B0'],
+['0%3B0%3B0%3B0'],
+null]" />
+		<wan_active_idx value="0" />
+		<link_status value="disconnected%3Badsl%3B0" />
+		<ip4_info_list type="array" value="[['217%2E42%2E11%2E77%3B255%2E255%2E255%2E255%3B172%2E16%2E14%2E78%3B81%2E139%2E57%2E100%3B81%2E139%2E56%2E100'],
+['0%2E0%2E0%2E0%3B0%2E0%2E0%2E0%3B0%2E0%2E0%2E0%3B0%2E0%2E0%2E0%3B0%2E0%2E0%2E0'],
+['0%2E0%2E0%2E0%3B0%2E0%2E0%2E0%3B0%2E0%2E0%2E0%3B0%2E0%2E0%2E0%3B0%2E0%2E0%2E0'],
+null]" />
+		<ip6_lla_list type="array" value="[['fe80%3A%3A4d5a%3A27bf%3A2165%3A2200%2F10'],
+['%3A%3A%2F0'],
+['%3A%3A%2F0'],
+null]" />
+		<ip6_gua_list type="array" value="[['2a00%3A23c6%3A7612%3A500%3A%3A1%2F64%3Bfe80%3A%3A427c%3A7dff%3Afe5e%3A2a31'],
+['%3A%3A%2F0%3B%3A%3A'],
+['%3A%3A%2F0%3B%3A%3A'],
+null]" />
+		<ip6_rdns_list type="array" value="[[null],[null],[null]]" />
+	<!-- END_REAL -->
+	<!--for home page, login lock-->
+		<locktime value="1" />
+	<!--END for home page, login lock-->
+</status>

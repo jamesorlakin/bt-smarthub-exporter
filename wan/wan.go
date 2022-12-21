@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // The raw response from /nonAuth/wan_conn.xml
@@ -38,9 +40,11 @@ type WanConnectionDetails struct {
 }
 
 func ParseWanXml(xmlContents []byte) (*WanConnectionDetails, error) {
+	log.Tracef("Got XML: %v", string(xmlContents))
 	body := WanConnXmlResponse{}
 	err := xml.Unmarshal(xmlContents, &body)
 	if err != nil {
+		log.Errorf("Could not parse XML: %v", err)
 		return nil, err
 	}
 
@@ -48,12 +52,14 @@ func ParseWanXml(xmlContents []byte) (*WanConnectionDetails, error) {
 
 	connStatus, err := decodeNestedJsonArrayFirst(body.Wan_conn_status_list.Value)
 	if err != nil {
+		log.Errorf("Could not decode connection status element: %v", err)
 		return nil, err
 	}
 	connectionDetails.IsConnected = connStatus[0] == "connected"
 
 	connVolume, err := decodeNestedJsonIntArrayFirst(body.Wan_conn_volume_list.Value)
 	if err != nil {
+		log.Errorf("Could not decode connection volume element: %v", err)
 		return nil, err
 	}
 	connectionDetails.DownloadedBytes = connVolume[1]
@@ -61,6 +67,7 @@ func ParseWanXml(xmlContents []byte) (*WanConnectionDetails, error) {
 
 	connRate, err := decodeNestedJsonIntArrayFirst(body.Wan_status_rate.Value)
 	if err != nil {
+		log.Errorf("Could not decode connection rate element: %v", err)
 		return nil, err
 	}
 	connectionDetails.UploadRateBps = connRate[0]

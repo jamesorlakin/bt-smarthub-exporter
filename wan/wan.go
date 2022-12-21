@@ -23,6 +23,7 @@ type WanConnXmlResponse struct {
 	Wan_conn_volume_list XmlValueAttribute `xml:"wan_conn_volume_list"`
 	// [0] up bits/sec, [1] down bits/sec, [2,3] not sure
 	Wan_status_rate XmlValueAttribute `xml:"status_rate"`
+	Sysuptime       XmlValueAttribute `xml:"sysuptime"`
 }
 
 // A workaround for Go not supporting getting the attribute during a chain
@@ -33,6 +34,7 @@ type XmlValueAttribute struct {
 
 type WanConnectionDetails struct {
 	IsConnected     bool
+	UptimeSeconds   int
 	DownloadedBytes int
 	UploadedBytes   int
 	DownloadRateBps int
@@ -49,6 +51,13 @@ func ParseWanXml(xmlContents []byte) (*WanConnectionDetails, error) {
 	}
 
 	connectionDetails := &WanConnectionDetails{}
+
+	uptime, err := strconv.Atoi(body.Sysuptime.Value)
+	if err != nil {
+		log.Errorf("Could not parse uptime int: %v", err)
+		return nil, err
+	}
+	connectionDetails.UptimeSeconds = uptime
 
 	connStatus, err := decodeNestedJsonArrayFirst(body.Wan_conn_status_list.Value)
 	if err != nil {

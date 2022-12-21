@@ -24,6 +24,7 @@ func TestXmlContents(t *testing.T) {
 	}
 
 	assert.Equal(t, true, connectionDetails.IsConnected, "IsConnected")
+	assert.Equal(t, 1284142, connectionDetails.UptimeSeconds, "UptimeSeconds")
 	assert.Equal(t, 336463954090, connectionDetails.DownloadedBytes, "DownloadedBytes")
 	assert.Equal(t, 34683717318, connectionDetails.UploadedBytes, "UploadedBytes")
 	assert.Equal(t, 1000000000, connectionDetails.UploadRateBps, "UploadRateBps")

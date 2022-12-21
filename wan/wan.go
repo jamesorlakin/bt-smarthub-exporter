@@ -17,7 +17,7 @@ import (
 // Oh, and some of the inner values are then URL-encoded strings delimited by ';'. WTF.
 // The interpretation of these is based on the JavaScript within /broadband.htm
 type WanConnXmlResponse struct {
-	// [0] connected/disconnected, [1,2] not sure
+	// [0] connected/disconnected, [1] connection uptime (start of connection referenced to system uptime), [2] not sure ('pass')
 	Wan_conn_status_list XmlValueAttribute `xml:"wan_conn_status_list"`
 	// 'volume' being traffic metrics. [0] not sure, [1] downloaded, [2] uploaded
 	Wan_conn_volume_list XmlValueAttribute `xml:"wan_conn_volume_list"`
@@ -33,12 +33,13 @@ type XmlValueAttribute struct {
 }
 
 type WanConnectionDetails struct {
-	IsConnected     bool
-	UptimeSeconds   int
-	DownloadedBytes int
-	UploadedBytes   int
-	DownloadRateBps int
-	UploadRateBps   int
+	IsConnected           bool
+	UptimeSeconds         int
+	ConnectionStartUptime int
+	DownloadedBytes       int
+	UploadedBytes         int
+	DownloadRateBps       int
+	UploadRateBps         int
 }
 
 func ParseWanXml(xmlContents []byte) (*WanConnectionDetails, error) {
@@ -65,6 +66,11 @@ func ParseWanXml(xmlContents []byte) (*WanConnectionDetails, error) {
 		return nil, err
 	}
 	connectionDetails.IsConnected = connStatus[0] == "connected"
+	connectionDetails.ConnectionStartUptime, err = strconv.Atoi(connStatus[1])
+	if err != nil {
+		log.Errorf("Could not parse connection start integer: %v", err)
+		return nil, err
+	}
 
 	connVolume, err := decodeNestedJsonIntArrayFirst(body.Wan_conn_volume_list.Value)
 	if err != nil {

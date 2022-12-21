@@ -26,6 +26,11 @@ var (
 		"The uptime of the router in seconds",
 		nil, nil,
 	)
+	metricConnectionUptime = prometheus.NewDesc(
+		"smarthub_connection_uptime",
+		"The uptime of the WAN connection in seconds",
+		nil, nil,
+	)
 	metricDownloadedBytes = prometheus.NewDesc(
 		"smarthub_downloaded_bytes",
 		"How many bytes have been downloaded during the lifetime of the WAN connection",
@@ -55,6 +60,8 @@ type Exporter struct {
 func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	ch <- metricUp
 	ch <- metricIsConnected
+	ch <- metricUptime
+	ch <- metricConnectionUptime
 	ch <- metricDownloadedBytes
 	ch <- metricUploadedBytes
 	ch <- metricUploadRate
@@ -77,6 +84,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 			ch <- prometheus.MustNewConstMetric(metricIsConnected, prometheus.GaugeValue, 0)
 		}
 		ch <- prometheus.MustNewConstMetric(metricUptime, prometheus.GaugeValue, float64(details.UptimeSeconds))
+		ch <- prometheus.MustNewConstMetric(metricConnectionUptime, prometheus.GaugeValue, float64(details.UptimeSeconds-details.ConnectionStartUptime))
 		ch <- prometheus.MustNewConstMetric(metricDownloadedBytes, prometheus.CounterValue, float64(details.DownloadedBytes))
 		ch <- prometheus.MustNewConstMetric(metricUploadedBytes, prometheus.CounterValue, float64(details.UploadedBytes))
 		ch <- prometheus.MustNewConstMetric(metricUploadRate, prometheus.GaugeValue, float64(details.UploadRateBps))

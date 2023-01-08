@@ -77,6 +77,12 @@ Yes, *executes* JavaScript. There'll be a better way - please feel free to tweak
 | smarthub_lan_downloaded_bytes | The number of bytes downloaded from the internet by each LAN device since the router restarted. Labels include `mac`, `hostname`, and `ip`.                                          |
 | smarthub_lan_uploaded_bytes   | The number of bytes downloaded to the internet by each LAN device since the router restarted. Labels include `mac`, `hostname`, and `ip`.                                            |
 
+## Grafana Dashboard
+
+An attempt at a Grafana dashboard lives in [Grafana Dashboard.json](./Grafana%20Dashboard.json):
+
+![Dashboard screenshot](./Grafana%20Dashboard.png)
+
 ## TODO
 
 - [ ] Option to turn off LAN metrics (e.g. executing JS is undesireable)

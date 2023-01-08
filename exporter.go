@@ -51,6 +51,17 @@ var (
 		"The WAN connection speed for download (may be to the modem for FTTP, which itself has a different speed)",
 		nil, nil,
 	)
+
+	metricLanDownloadedBytes = prometheus.NewDesc(
+		"smarthub_lan_downloaded_bytes",
+		"Device downloaded bytes",
+		[]string{"mac", "hostname", "ip"}, nil,
+	)
+	metricLanUploadedBytes = prometheus.NewDesc(
+		"smarthub_lan_uploaded_bytes",
+		"Device uploaded bytes",
+		[]string{"mac", "hostname", "ip"}, nil,
+	)
 )
 
 type Exporter struct {
@@ -66,6 +77,8 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	ch <- metricUploadedBytes
 	ch <- metricUploadRate
 	ch <- metricDownloadRate
+	ch <- metricLanDownloadedBytes
+	ch <- metricLanUploadedBytes
 }
 
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
@@ -89,6 +102,16 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(metricUploadedBytes, prometheus.CounterValue, float64(details.UploadedBytes))
 		ch <- prometheus.MustNewConstMetric(metricUploadRate, prometheus.GaugeValue, float64(details.UploadRateBps))
 		ch <- prometheus.MustNewConstMetric(metricDownloadRate, prometheus.GaugeValue, float64(details.DownloadRateBps))
+	}
+
+	lanDevices, err := smarthub.ScrapeLanDetails(e.host)
+	if err != nil {
+		log.Errorf("could not get LAN details: %v", err)
+	} else {
+		for _, device := range lanDevices {
+			ch <- prometheus.MustNewConstMetric(metricLanDownloadedBytes, prometheus.CounterValue, float64(device.DownloadedBytes), device.Mac, device.Hostname, device.Ip)
+			ch <- prometheus.MustNewConstMetric(metricLanUploadedBytes, prometheus.CounterValue, float64(device.UploadedBytes), device.Mac, device.Hostname, device.Ip)
+		}
 	}
 }
 
